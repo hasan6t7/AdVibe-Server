@@ -50,7 +50,24 @@ const userLoggedIn = async (req, res) => {
   }
 };
 
+const userLoggedOut = async (req, res) => {
+  try {
+    res.clearCookie("token"),
+      res.status(200).send({ message: "LogOut Successfull" });
+  } catch (error) {
+    console.log("Error LoggedOut user", error);
+    res.status(500).send({ message: "LogOut Failed" });
+  }
+};
+
+const getAllUsers =async (req, res) => {
+  
+  
+}
+
 module.exports = {
   userRegistration,
   userLoggedIn,
+  userLoggedOut,
+  getAllUsers
 };
