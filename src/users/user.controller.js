@@ -1,4 +1,5 @@
 const generateToken = require("../middleware/generateToken");
+const { successResponse, errorResponse } = require("../utils/responseHandler");
 const User = require("./user.model");
 
 const userRegistration = async (req, res) => {
@@ -30,9 +31,7 @@ const userLoggedIn = async (req, res) => {
       secure: true,
       sameSite: "None",
     });
-
-    res.status(200).send({
-      message: "Login Successfully Done",
+    successResponse(res, 200, "Login Successfully Done", {
       token,
       user: {
         _id: user._id,
@@ -52,22 +51,26 @@ const userLoggedIn = async (req, res) => {
 
 const userLoggedOut = async (req, res) => {
   try {
-    res.clearCookie("token"),
-      res.status(200).send({ message: "LogOut Successfull" });
+    res.clearCookie("token");
+
+    successResponse(res, 200, "LogOut Successful");
   } catch (error) {
-    console.log("Error LoggedOut user", error);
-    res.status(500).send({ message: "LogOut Failed" });
+    errorResponse(res, 500, "LogOut Failed", error);
   }
 };
 
-const getAllUsers =async (req, res) => {
-  
-  
-}
+const getAllUsers = async (req, res) => {
+  try {
+    const user = await User.find({},'email role profession createdAt profileImage').sort({ createdAt: -1 });
+    successResponse(res, 200, "All Users Fetch Successfully", user);
+  } catch (error) {
+    errorResponse(res, 500, "Failed to fetch all user");
+  }
+};
 
 module.exports = {
   userRegistration,
   userLoggedIn,
   userLoggedOut,
-  getAllUsers
+  getAllUsers,
 };

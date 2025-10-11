@@ -1,5 +1,6 @@
 const express = require("express");
 const { userRegistration, userLoggedIn, userLoggedOut, getAllUsers } = require("./user.controller");
+const verifyToken = require("../middleware/verifyToken");
 const router = express.Router();
 
 
@@ -13,6 +14,6 @@ router.post("/login" , userLoggedIn)
 router.post("/logout" , userLoggedOut)
 
 // all user 
-router.get("/users" , getAllUsers)
+router.get("/users" ,verifyToken, getAllUsers)
 
 module.exports = router;
