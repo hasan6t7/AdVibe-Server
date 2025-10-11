@@ -100,8 +100,31 @@ const getSingleProducts = async (req, res) => {
   }
 };
 
+const updateProduct = async (req, res) => {
+  const { id } = req.params;
+  const updatedDoc = req.body;
+ 
+  try {
+    const updatedProduct = await Products.findByIdAndUpdate(id, updatedDoc, {
+      new: true,
+    });
+    if (!updatedProduct) {
+      return errorResponse(res, 404, "Product Not Found");
+    }
+    return successResponse(
+      res,
+      200,
+      "Product Updated Successfully!",
+      updatedProduct
+    );
+  } catch (error) {
+    errorResponse(res, 500, "Failed to update product", error);
+  }
+};
+
 module.exports = {
   createNewProduct,
   getAllProducts,
   getSingleProducts,
+  updateProduct,
 };

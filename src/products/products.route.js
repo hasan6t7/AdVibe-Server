@@ -1,5 +1,5 @@
 const express = require("express");
-const { createNewProduct, getAllProducts, getSingleProducts } = require("./products.controller");
+const { createNewProduct, getAllProducts, getSingleProducts, updateProduct } = require("./products.controller");
 const router = express.Router();
 
 
@@ -11,5 +11,8 @@ router.get("/" , getAllProducts)
 
 // get single product 
 router.get("/:id" , getSingleProducts)
+
+// update product 
+router.patch("/update-product/:id" , updateProduct)
 
 module.exports = router;
