@@ -63,22 +63,45 @@ const getAllProducts = async (req, res) => {
       .skip(skip)
       .limit(parseInt(limit))
       .populate("author", "email");
+    return successResponse(res, 200, "Successfully get all products", {
+      products,
+      totalPage,
+      totalProduct,
+    });
+  } catch (error) {
+    errorResponse(res, 500, "Failed to get all products", error);
+  }
+};
+
+const getSingleProducts = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const singleProduct = await Products.findById(id).populate(
+      "author",
+      "email username"
+    );
+    if (!singleProduct) {
+      return errorResponse(res, 404, "product not found!");
+    }
+
+    const review = await Reviews.find({ productId: id }).populate(
+      "userId",
+      "username email"
+    );
+
     return successResponse(
       res,
       200,
-      "Successfully get all products",
-      (data = {
-        products,
-        totalPage,
-        totalProduct,
-      })
+      "get single product and review successfully",
+      { singleProduct, review }
     );
   } catch (error) {
-    errorResponse(res, 500, "Failed to get all products", error);
+    errorResponse(res, 500, "Failed to get single product", error);
   }
 };
 
 module.exports = {
   createNewProduct,
   getAllProducts,
+  getSingleProducts,
 };
