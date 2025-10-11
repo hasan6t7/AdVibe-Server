@@ -12,7 +12,7 @@ const verifyToken = async (req, res, next) => {
     if (!decoded.userId) {
       return errorResponse(res, 401, "Access Denied");
     }
-    console.log(decoded);
+    
     req.userId = decoded.userId;
     req.role = decoded.role;
     next();
