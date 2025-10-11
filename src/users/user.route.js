@@ -4,6 +4,8 @@ const {
   userLoggedIn,
   userLoggedOut,
   getAllUsers,
+  userDelete,
+  userUpadate,
 } = require("./user.controller");
 const verifyToken = require("../middleware/verifyToken");
 const verifyAdmin = require("../middleware/verifyAdmin");
@@ -20,5 +22,12 @@ router.post("/logout", userLoggedOut);
 
 // all user
 router.get("/users", verifyToken, verifyAdmin, getAllUsers);
+
+// delete user
+router.delete("/users/:id", verifyToken, verifyAdmin, userDelete);
+
+// edit user role 
+
+router.put("/users/:id" , userUpadate)
 
 module.exports = router;

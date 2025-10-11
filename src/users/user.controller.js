@@ -61,16 +61,35 @@ const userLoggedOut = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
   try {
-    const user = await User.find({},'email role profession createdAt profileImage').sort({ createdAt: -1 });
+    const user = await User.find(
+      {},
+      "email role profession createdAt profileImage"
+    ).sort({ createdAt: -1 });
     successResponse(res, 200, "All Users Fetch Successfully", user);
   } catch (error) {
     errorResponse(res, 500, "Failed to fetch all user");
   }
 };
 
+const userDelete = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findByIdAndDelete(id);
+    if (!user) {
+      errorResponse(res, 404, "User Not Found");
+    }
+    return successResponse(res, 200, "User Successfully Deleted!");
+  } catch (error) {
+    errorResponse(res, 500, "Failed to delete user", error);
+  }
+};
+
+
 module.exports = {
   userRegistration,
   userLoggedIn,
   userLoggedOut,
   getAllUsers,
+  userDelete,
+  userUpadate,
 };
