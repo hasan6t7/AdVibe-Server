@@ -95,9 +95,36 @@ const userUpadate = async (req, res) => {
     if (!updateUserRole) {
       return errorResponse(res, 404, "User Not Found");
     }
-    return successResponse(res, 200, "User Role Updated Successfully!", updateUserRole);
+    return successResponse(
+      res,
+      200,
+      "User Role Updated Successfully!",
+      updateUserRole
+    );
   } catch (error) {
     errorResponse(res, 500, "Failed to Update User");
+  }
+};
+
+const userProfileUpdate = async (req, res) => {
+  const { id } = req.params;
+  const updatedDoc = req.body;
+
+  try {
+    const updatedUserProfile = await User.findByIdAndUpdate(id, updatedDoc, {
+      new: true,
+    });
+    if (!updatedUserProfile) {
+      return errorResponse(res, 404, "User Not Found");
+    }
+    return successResponse(
+      res,
+      200,
+      "User Profile Updated Successfully!",
+      updatedUserProfile
+    );
+  } catch (error) {
+    errorResponse(res, 500, "Profile Edit Failed", error);
   }
 };
 
@@ -108,4 +135,5 @@ module.exports = {
   getAllUsers,
   userDelete,
   userUpadate,
+  userProfileUpdate,
 };
