@@ -103,7 +103,7 @@ const getSingleProducts = async (req, res) => {
 const updateProduct = async (req, res) => {
   const { id } = req.params;
   const updatedDoc = req.body;
- 
+
   try {
     const updatedProduct = await Products.findByIdAndUpdate(id, updatedDoc, {
       new: true,
@@ -122,9 +122,24 @@ const updateProduct = async (req, res) => {
   }
 };
 
+const deleteProduct = async (req, res) => {
+  const productId = req.params.id;
+  try {
+    const deleted = await Products.findByIdAndDelete(productId);
+    if (!deleted) {
+      errorResponse(res, 404, "Product Not Found");
+    }
+    await Reviews.deleteMany(productId);
+    successResponse(res, 200, "Product Deleted Successfully!");
+  } catch (error) {
+    errorResponse(res, 500, "Delete Product Failed", error);
+  }
+};
+
 module.exports = {
   createNewProduct,
   getAllProducts,
   getSingleProducts,
   updateProduct,
+  deleteProduct,
 };
