@@ -83,7 +83,23 @@ const userDelete = async (req, res) => {
     errorResponse(res, 500, "Failed to delete user", error);
   }
 };
-
+const userUpadate = async (req, res) => {
+  const { id } = req.params;
+  const { role } = req.body;
+  try {
+    const updateUserRole = await User.findByIdAndUpdate(
+      id,
+      { role },
+      { new: true }
+    );
+    if (!updateUserRole) {
+      return errorResponse(res, 404, "User Not Found");
+    }
+    return successResponse(res, 200, "User Role Updated Successfully!", updateUserRole);
+  } catch (error) {
+    errorResponse(res, 500, "Failed to Update User");
+  }
+};
 
 module.exports = {
   userRegistration,
