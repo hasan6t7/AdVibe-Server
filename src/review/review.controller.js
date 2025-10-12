@@ -36,6 +36,21 @@ const createNewReview = async (req, res) => {
   }
 };
 
+
+const getReviewUser = async (req, res) => {
+  const {id}= req.params
+  try {
+    const reviews =await Reviews.find({userId: id})
+    if(!reviews){
+      errorResponse(res, 404 , "No Review Found!")
+    }
+    successResponse(res, 200, "Review  get Successfully", reviews)
+  } catch (error) {
+    errorResponse(res,500, "Failed to fetch review",error)
+  }
+}
+
 module.exports = {
   createNewReview,
+  getReviewUser
 };
