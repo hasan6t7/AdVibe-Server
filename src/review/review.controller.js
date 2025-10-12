@@ -50,7 +50,20 @@ const getReviewUser = async (req, res) => {
   }
 }
 
+const getTotalReviewsCount = async (req , res) => {
+  try {
+    const totalReviews = await Reviews.countDocuments()
+    if(!totalReviews){
+      errorResponse(res, 404, "No Review Found")
+    }
+    return successResponse(res, 200, "Successfully get total reviews count", totalReviews)
+  } catch (error) {
+    errorResponse(res, 500, "Failed to get total review count")
+  }
+}
+
 module.exports = {
   createNewReview,
-  getReviewUser
+  getReviewUser,
+  getTotalReviewsCount
 };
