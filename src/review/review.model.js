@@ -7,7 +7,7 @@ const reviwSchema = new mongoose.Schema(
       require: true,
     },
     rating: {
-      type: Number,
+      type: Number, 
       require: true,
     },
     userId: {

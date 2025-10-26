@@ -4,8 +4,10 @@ const app = express();
 const port = process.env.PORT || 5000;
 require("dotenv").config();
 const cors = require("cors");
+const bodyParser = require("body-parser");
 
 app.use(express.json());
+app.use(bodyParser.json());
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -13,13 +15,15 @@ app.use(
   })
 );
 
-const userRoutes = require("./src/users/user.route");
-const productRoutes = require("./src/products/products.route");
-const reviewRoutes = require("./src/review/review.route");
+const usersRoutes = require("./src/users/user.route");
+const productsRoutes = require("./src/products/products.route");
+const reviewsRoutes = require("./src/review/review.route");
+const ordersRoutes = require("./src/orders/order.route");
 
-app.use("/api/auth", userRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/reviews" , reviewRoutes)
+app.use("/api/auth", usersRoutes);
+app.use("/api/products", productsRoutes);
+app.use("/api/reviews", reviewsRoutes);
+app.use("/api/orders", ordersRoutes);
 
 async function main() {
   await mongoose.connect(process.env.DB_URI);

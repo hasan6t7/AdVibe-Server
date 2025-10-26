@@ -84,7 +84,7 @@ const getSingleProducts = async (req, res) => {
       return errorResponse(res, 404, "product not found!");
     }
 
-    const review = await Reviews.find({ productId: id }).populate(
+    const reviews = await Reviews.find({ productId: id }).populate(
       "userId",
       "username email"
     );
@@ -93,7 +93,7 @@ const getSingleProducts = async (req, res) => {
       res,
       200,
       "get single product and review successfully",
-      { singleProduct, review }
+      { singleProduct, reviews }
     );
   } catch (error) {
     errorResponse(res, 500, "Failed to get single product", error);

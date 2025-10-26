@@ -1,5 +1,6 @@
 const express = require("express");
 const { createNewReview, getReviewUser, getTotalReviewsCount } = require("./review.controller");
+const verifyToken = require("../middleware/verifyToken");
 const router = express.Router();
 
 // Create Review 

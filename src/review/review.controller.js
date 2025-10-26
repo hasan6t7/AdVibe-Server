@@ -20,7 +20,10 @@ const createNewReview = async (req, res) => {
 
     const reviews = await Reviews.find({ productId });
     if (reviews.length > 0) {
-      const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
+      const totalRating = reviews.reduce(
+        (acc, review) => acc + review.rating,
+        0
+      );
       const averageRating = totalRating / reviews.length;
       const product = await Products.findById(productId);
       if (product) {
@@ -36,34 +39,38 @@ const createNewReview = async (req, res) => {
   }
 };
 
-
 const getReviewUser = async (req, res) => {
-  const {id}= req.params
+  const { id } = req.params;
   try {
-    const reviews =await Reviews.find({userId: id})
-    if(!reviews){
-      errorResponse(res, 404 , "No Review Found!")
+    const reviews = await Reviews.find({ userId: id });
+    if (!reviews) {
+      errorResponse(res, 404, "No Review Found!");
     }
-    successResponse(res, 200, "Review  get Successfully", reviews)
+    successResponse(res, 200, "Review  get Successfully", reviews);
   } catch (error) {
-    errorResponse(res,500, "Failed to fetch review",error)
+    errorResponse(res, 500, "Failed to fetch review", error);
   }
-}
+};
 
-const getTotalReviewsCount = async (req , res) => {
+const getTotalReviewsCount = async (req, res) => {
   try {
-    const totalReviews = await Reviews.countDocuments()
-    if(!totalReviews){
-      errorResponse(res, 404, "No Review Found")
+    const totalReviews = await Reviews.countDocuments();
+    if (!totalReviews) {
+      errorResponse(res, 404, "No Review Found");
     }
-    return successResponse(res, 200, "Successfully get total reviews count", totalReviews)
+    return successResponse(
+      res,
+      200,
+      "Successfully get total reviews count",
+      totalReviews
+    );
   } catch (error) {
-    errorResponse(res, 500, "Failed to get total review count")
+    errorResponse(res, 500, "Failed to get total review count");
   }
-}
+};
 
 module.exports = {
   createNewReview,
   getReviewUser,
-  getTotalReviewsCount
+  getTotalReviewsCount,
 };
