@@ -19,11 +19,13 @@ const usersRoutes = require("./src/users/user.route");
 const productsRoutes = require("./src/products/products.route");
 const reviewsRoutes = require("./src/review/review.route");
 const ordersRoutes = require("./src/orders/order.route");
+const statsRoutes = require("./src/stats/stats.route");
 
 app.use("/api/auth", usersRoutes);
 app.use("/api/products", productsRoutes);
 app.use("/api/reviews", reviewsRoutes);
 app.use("/api/orders", ordersRoutes);
+app.use("/api/stats", statsRoutes);
 
 async function main() {
   await mongoose.connect(process.env.DB_URI);
