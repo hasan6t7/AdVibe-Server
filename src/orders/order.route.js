@@ -4,6 +4,7 @@ const {
   confirmPayment,
   getOrdersByEmail,
   getOrdersByOrderId,
+  getAllOrder,
 } = require("./order.controller");
 const router = express.Router();
 
@@ -18,5 +19,8 @@ router.get("/:email", getOrdersByEmail);
 
 // get orders by orderID
 router.get("/order/:id", getOrdersByOrderId);
+
+// get all orders ( admin only)
+router.get("/" , getAllOrder)
 
 module.exports = router;

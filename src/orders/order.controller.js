@@ -102,9 +102,22 @@ const getOrdersByOrderId = async (req, res) => {
   }
 };
 
+const getAllOrder = async (req, res) => {
+  try {
+    const orders = await Order.find().sort({ createdAt: -1 });
+    if (!orders) {
+      return errorResponse(res, 404, "No orders Found");
+    }
+    return successResponse(res, 200, "Successfully get all orders", orders);
+  } catch (error) {
+    return errorResponse(res, 500, "Failed to get All Orders", error);
+  }
+};
+
 module.exports = {
   makePaymentReq,
   confirmPayment,
   getOrdersByEmail,
   getOrdersByOrderId,
+  getAllOrder,
 };
