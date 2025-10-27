@@ -5,6 +5,9 @@ const {
   getOrdersByEmail,
   getOrdersByOrderId,
   getAllOrder,
+  updateOrderStatus,
+  deleteOrderById,
+
 } = require("./order.controller");
 const router = express.Router();
 
@@ -21,6 +24,12 @@ router.get("/:email", getOrdersByEmail);
 router.get("/order/:id", getOrdersByOrderId);
 
 // get all orders ( admin only)
-router.get("/" , getAllOrder)
+router.get("/", getAllOrder);
+
+// update order status
+router.patch("/update-order-status/:id", updateOrderStatus);
+
+// delete order 
+router.delete("/delete-order/:id" , deleteOrderById)
 
 module.exports = router;

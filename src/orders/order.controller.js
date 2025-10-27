@@ -114,10 +114,59 @@ const getAllOrder = async (req, res) => {
   }
 };
 
+const updateOrderStatus = async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+  if (!status) {
+    return errorResponse(res, 400, "Status is Required");
+  }
+  try {
+    const updatedOrder = await Order.findByIdAndUpdate(
+      id,
+      {
+        status,
+        updatedAt: Date.now(),
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    return successResponse(
+      res,
+      200,
+      "Order Successfully Updated",
+      updatedOrder
+    );
+  } catch (error) {
+    errorResponse(res, 500, "Failed to update order status", error);
+  }
+};
+
+const deleteOrderById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedOrder = await Order.findByIdAndDelete(id);
+    if (!deletedOrder) {
+      return errorResponse(res, 404, "Order Not Found");
+    }
+    return successResponse(
+      res,
+      200,
+      "Order Deleted Successfully",
+      deletedOrder
+    );
+  } catch (error) {
+    errorResponse(res, 500, "Failed to Delete Order", error);
+  }
+};
+
 module.exports = {
   makePaymentReq,
   confirmPayment,
   getOrdersByEmail,
   getOrdersByOrderId,
   getAllOrder,
+  updateOrderStatus,
+  deleteOrderById,
 };
