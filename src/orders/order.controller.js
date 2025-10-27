@@ -81,8 +81,30 @@ const getOrdersByEmail = async (req, res) => {
   }
 };
 
+const getOrdersByOrderId = async (req, res) => {
+  const id = req.params.id;
+  try {
+    if (!id) {
+      return errorResponse(res, 400, "Order id is required");
+    }
+    const order = await Order.findById(id);
+    if (!order) {
+      return errorResponse(res, 404, "Order not found by order id");
+    }
+    return successResponse(
+      res,
+      200,
+      "Order get successfully by order id",
+      order
+    );
+  } catch (error) {
+    errorResponse(res, 500, "Failed to get Orders by order id", error);
+  }
+};
+
 module.exports = {
   makePaymentReq,
   confirmPayment,
   getOrdersByEmail,
+  getOrdersByOrderId,
 };

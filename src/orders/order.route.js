@@ -3,6 +3,7 @@ const {
   makePaymentReq,
   confirmPayment,
   getOrdersByEmail,
+  getOrdersByOrderId,
 } = require("./order.controller");
 const router = express.Router();
 
@@ -15,6 +16,7 @@ router.post("/confirm-payment", confirmPayment);
 // get orders by email
 router.get("/:email", getOrdersByEmail);
 
-
+// get orders by orderID
+router.get("/order/:id", getOrdersByOrderId);
 
 module.exports = router;
