@@ -38,6 +38,7 @@ const userLoggedIn = async (req, res) => {
         email: user.email,
         username: user.username,
         role: user.role,
+        bio: user.bio,
         profileImage: user.profileImage,
         profession: user.profession,
         createdAt: user.createdAt,

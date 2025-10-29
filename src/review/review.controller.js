@@ -42,7 +42,7 @@ const createNewReview = async (req, res) => {
 const getReviewUser = async (req, res) => {
   const { id } = req.params;
   try {
-    const reviews = await Reviews.find({ userId: id });
+    const reviews = await Reviews.find({ userId: id }).sort({ createdAt: -1 });
     if (!reviews) {
       errorResponse(res, 404, "No Review Found!");
     }
