@@ -30,7 +30,7 @@ const userLoggedIn = async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: "None",
-    });
+    }); 
     successResponse(res, 200, "Login Successfully Done", {
       token,
       user: {
@@ -87,6 +87,7 @@ const userDelete = async (req, res) => {
 const userUpadate = async (req, res) => {
   const { id } = req.params;
   const { role } = req.body;
+ 
   try {
     const updateUserRole = await User.findByIdAndUpdate(
       id,

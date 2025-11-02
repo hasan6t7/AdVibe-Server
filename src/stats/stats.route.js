@@ -81,7 +81,7 @@ router.get("/admin-stats", async (req, res) => {
   const monthlyEarnings = monthlyEarningsResult.map((entry) => ({
     month: entry._id.month,
     year: entry._id.year,
-    earnings: entry._id.monthlyEarnings,
+    earnings: entry.monthlyEarnings,
   }));
   res.status(200).json({
     totalOrders,

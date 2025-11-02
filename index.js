@@ -6,8 +6,9 @@ require("dotenv").config();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 
-app.use(express.json());
-app.use(bodyParser.json());
+app.use(express.json({ limit: "10mb" }));
+app.use(bodyParser.json({ limit: "10mb" }));
+
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -26,6 +27,7 @@ app.use("/api/products", productsRoutes);
 app.use("/api/reviews", reviewsRoutes);
 app.use("/api/orders", ordersRoutes);
 app.use("/api/stats", statsRoutes);
+const uploadImage = require("./src/utils/uploadImage");
 
 async function main() {
   await mongoose.connect(process.env.DB_URI);
@@ -39,9 +41,12 @@ main()
   .then(() => console.log("Mongodb Connected successfully"))
   .catch((err) => console.log(err));
 
-// hasanhasanujjaman4368_db_user
-
-// WlIMtN4pX042mzuR
+// uploa image api
+app.post("/uploadImage", (req, res) => {
+  uploadImage(req.body.image)
+    .then((url) => res.send(url))
+    .catch((err) => res.status(500).send(err));
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

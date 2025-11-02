@@ -15,7 +15,7 @@ const generateToken = async (userId) => {
         role: user.role,
       },
       JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "5h" }
     );
     return token;
   } catch (error) {
