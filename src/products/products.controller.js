@@ -62,7 +62,8 @@ const getAllProducts = async (req, res) => {
     const products = await Products.find(filter)
       .skip(skip)
       .limit(parseInt(limit))
-      .populate("author", "email");
+      .populate("author", "email")
+      .sort({ updatedAt: -1 });
     return successResponse(res, 200, "Successfully get all products", {
       products,
       totalPage,
@@ -129,7 +130,7 @@ const deleteProduct = async (req, res) => {
     if (!deleted) {
       errorResponse(res, 404, "Product Not Found");
     }
-    await Reviews.deleteMany(productId);
+    await Reviews.deleteMany({ productId: productId });
     successResponse(res, 200, "Product Deleted Successfully!");
   } catch (error) {
     errorResponse(res, 500, "Delete Product Failed", error);
