@@ -11,10 +11,11 @@ app.use(bodyParser.json({ limit: "10mb" }));
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "https://advive-e-com.web.app"],
     credentials: true,
   })
 );
+
 
 const usersRoutes = require("./src/users/user.route");
 const productsRoutes = require("./src/products/products.route");
