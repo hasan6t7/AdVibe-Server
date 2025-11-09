@@ -4,11 +4,11 @@ const reviwSchema = new mongoose.Schema(
   {
     comment: {
       type: String,
-      require: true,
+      required: true,
     },
     rating: {
       type: Number, 
-      require: true,
+      required: true,
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,

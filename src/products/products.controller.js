@@ -87,7 +87,7 @@ const getSingleProducts = async (req, res) => {
 
     const reviews = await Reviews.find({ productId: id }).populate(
       "userId",
-      "username email"
+      "username email profileImage"
     );
 
     return successResponse(

@@ -4,6 +4,7 @@ const Reviews = require("./review.model");
 
 const createNewReview = async (req, res) => {
   const { comment, rating, userId, productId } = req.body;
+
   try {
     if (!comment || rating === undefined || !userId || !productId) {
       return errorResponse(res, 400, "Missing Required Field");
@@ -11,10 +12,17 @@ const createNewReview = async (req, res) => {
     const existingReview = await Reviews.findOne({ productId, userId });
     if (existingReview) {
       existingReview.comment = comment;
+      
       existingReview.rating = rating;
       await existingReview.save();
     } else {
-      const newReview = new Reviews({ comment, rating, userId, productId });
+      const newReview = new Reviews({
+        comment,
+        rating,
+        userId,
+        productId,
+    
+      });
       await newReview.save();
     }
 
