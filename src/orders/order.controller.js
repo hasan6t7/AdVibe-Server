@@ -36,34 +36,62 @@ const confirmPayment = async (req, res) => {
 
   try {
     const session = await stripe.checkout.sessions.retrieve(session_id, {
-      expand: ["line_items", "payment_intent"],
+      expand: ["line_items.data.price", "payment_intent"],
     });
-    const paymentIntentId = session.payment_intent.id;
-    let order = await Order.findOne({ orderId: paymentIntentId });
-    if (!order) {
-      const lineItems = session.line_items.data.map((item) => ({
-        productId: item.price.product,
-        quantity: item.quantity,
-      }));
-      const amount = session.amount_total / 100;
-      order = new Order({
-        orderId: paymentIntentId,
-        products: lineItems,
-        amount: amount,
-        email: session.customer_details.email,
-        status:
-          session.payment_intent.status === "succeeded" ? "Pending" : "Failed",
-      });
-    } else {
-      order.status =
-        session.payment_intent.status === "succeeded" ? "Pending" : "Failed";
+
+    const paymentIntent = session.payment_intent;
+    const paymentIntentId = paymentIntent?.id;
+
+    if (!paymentIntentId) {
+      return errorResponse(res, 400, "Payment Intent not found in session");
     }
-    await order.save();
-    return successResponse(res, 200, "Order Confirmed Successfully", order);
+
+    const lineItems = await Promise.all(
+      session.line_items.data.map(async (item) => {
+        const productId = item.price.product;
+        let name = "Unknown Product";
+        let image = null;
+
+        try {
+          const product = await stripe.products.retrieve(productId);
+          console.log(product)
+          name = product.name;
+          image = product.images?.[0] || null;
+        } catch (err) {
+          console.log("Failed to fetch product details for:", productId);
+        }
+
+        return {
+          productId,
+          name,
+          image,
+          quantity: item.quantity,
+        };
+      })
+    );
+
+    const amount = session.amount_total / 100;
+    const email = session.customer_details?.email || "unknown@example.com";
+    const status = paymentIntent.status === "succeeded" ? "Pending" : "Failed";
+    const order = await Order.findOneAndUpdate(
+      { orderId: paymentIntentId },
+      {
+        $set: {
+          products: lineItems,
+          amount,
+          email,
+          status,
+        },
+      },
+      { new: true, upsert: true }
+    );
+
+    return successResponse(res, 200, "Order confirmed successfully!", order);
   } catch (error) {
-    return errorResponse(res, 500, "Error on confirm payment", error);
+    console.error("Error confirming payment:", error);
+    return errorResponse(res, 500, "Error confirming payment", error);
   }
-};
+}; 
 
 const getOrdersByEmail = async (req, res) => {
   const email = req.params.email;
